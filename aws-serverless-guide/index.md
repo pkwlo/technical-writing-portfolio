@@ -36,7 +36,7 @@
     - 11.3 [Live Chat](#113-live-chat)
     - 11.4 [Favourites](#114-favourites)
     - 11.5 [Mapping](#115-mapping)
-    - 11.6 [Admin & Reporting](#116-admin-&-reporting)
+    - 11.6 [Admin & Reporting](#116-admin-and-reporting)
 12. [Deployment](#12-deployment)
 13. [Known Limitations](#13-known-limitations)
 14. [Summary](#13-summary)
@@ -656,7 +656,7 @@ The mapping endpoints require no authentication, since geocoding results are not
 
 ---
 
-### 11.6 Admin & Reporting
+### 11.6 Admin and Reporting
 
 The admin and reporting features provide platform administrators with tools to monitor marketplace activity, review reported listings, and take moderation actions. Like the mapping feature, these Lambdas are deployed outside the CDK stack (under `lambdas/NonCDK/admin-dashboard/`) and are wired to the `/admin` resource group, which is protected by the Cognito Admin Pool authorizer.
 
