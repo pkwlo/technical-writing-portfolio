@@ -4,8 +4,14 @@
   --md-code-font-size: 0.65rem;
 }
 
+pre code {
+  white-space: pre;
+  overflow-x: auto;
+  font-family: monospace;
+}
+
 .md-typeset {
-  font-size: 0.78rem;
+  font-size: 0.65rem;
 }
 
 .md-typeset h1 {
