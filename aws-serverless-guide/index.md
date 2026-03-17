@@ -1,3 +1,10 @@
+# Serverless Backend Architecture and Implementation Guide
+
+**Technical Writing Sample — Patricia Lo**  
+Prepared for Technical Writer Applications
+
+---
+
 # Building a Serverless Backend with AWS CDK: The CrocsList Architecture and Implementation Guide
 
 **Author:** Patricia Lo
