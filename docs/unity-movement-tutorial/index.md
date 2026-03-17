@@ -5,9 +5,7 @@ Prepared for Technical Writer Applications
 
 ---
 
-**Author:** Patricia Lo
-
-**Date:** Jan 2026
+**Author:** Patricia Lo | **Date:** March 2026
 
 **Audience:** Intermediate developers familiar with basic C# scripting and Unity editor navigation
 

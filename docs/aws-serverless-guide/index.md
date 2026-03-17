@@ -4,9 +4,11 @@
 
 **Audience:** Backend engineers, cloud architects, and DevOps practitioners with intermediate AWS experience
 
+**Documentation Type:** Architecture and Implementation Guide
+
 ---
 
-## 1. Introduction
+## Introduction
 
 Serverless architectures on AWS removes the requirement to manage server infrastructure, allowing teams to focus on application logic rather than infrastructure operations. However, managing the dozens of interconnected resources that make up a serverless backend — Lambda functions, API Gateway endpoints, DynamoDB tables, S3 buckets, Cognito user pools — can quickly become unwieldy without a disciplined approach to infrastructure definition.
 
@@ -43,7 +45,7 @@ Frontend implementation details and UI behavior are intentionally out of scope.
 
 ---
 
-## 2. Architecture Overview
+## Architecture Overview
 
 The serverless backend follows a standard three-tier serverless pattern on AWS:
 
@@ -104,7 +106,7 @@ The serverless backend follows a standard three-tier serverless pattern on AWS:
 
 ---
 
-## 3. Prerequisites
+## Prerequisites
 
 Before working with this codebase, ensure the following tools are installed and configured:
 
@@ -125,7 +127,7 @@ aws sso login --profile <your-profile>
 
 ---
 
-## 4. Project Structure
+## Project Structure
 
 The serverless backend follows a separation between **infrastructure definitions** (TypeScript, in `lib/`) and **runtime code** (Python, in `lambdas/`):
 
@@ -166,9 +168,9 @@ The `lib/` directory describes what infrastructure exists, while `lambdas/` cont
 
 ---
 
-## 5. Infrastructure as Code with AWS CDK
+## Infrastructure as Code with AWS CDK
 
-### 5.1 Why CDK Over CloudFormation or Terraform
+### Why CDK Over CloudFormation or Terraform
 
 AWS CDK allows you to define cloud infrastructure using general-purpose programming languages. Compared to writing raw CloudFormation YAML or Terraform HCL, CDK offers three practical advantages for this project:
 
@@ -176,7 +178,7 @@ AWS CDK allows you to define cloud infrastructure using general-purpose programm
 2. **Abstraction via constructs.** Repeated patterns (like attaching a Cognito authorizer to every protected route) can be encapsulated in reusable methods.
 3. **Same-language tooling.** Infrastructure and application configuration live in the same TypeScript project, sharing types, constants, and IDE support.
 
-### 5.2 The Construct Pattern
+### The Construct Pattern
 
 CDK organizes infrastructure into **constructs** — composable classes that represent one or more AWS resources. This project uses three levels of abstraction:
 
@@ -188,7 +190,7 @@ CDK organizes infrastructure into **constructs** — composable classes that rep
 
 The feature constructs in `lib/features/` are **L3 constructs** — each one bundles Lambda functions, API Gateway routes, and IAM permissions into a cohesive module that the root stack instantiates with a single call.
 
-### 5.3 Stack Composition
+### Stack Composition
 
 The `ProductionStack` class serves as the composition root. It instantiates shared infrastructure (Cognito, API Gateway, DynamoDB tables, S3) and passes references into each feature construct:
 
@@ -225,9 +227,9 @@ Each feature construct receives only the shared resources it needs through its p
 
 ---
 
-## 6. Data Layer: DynamoDB Table Design
+## Data Layer: DynamoDB Table Design
 
-### 6.1 Table Schemas
+### Table Schemas
 
 The application uses four DynamoDB tables, each optimized for a specific access pattern:
 
@@ -244,7 +246,7 @@ Table names include the AWS account ID and region to prevent collisions across e
 const tableName = `Listings-${cdk.Stack.of(this).account}-${cdk.Stack.of(this).region}`;
 ```
 
-### 6.2 Access Patterns and Indexing
+### Access Patterns and Indexing
 
 The Listings table includes a **Global Secondary Index** (GSI) to support a common query: "retrieve all listings owned by a specific user."
 
@@ -273,9 +275,9 @@ The **Favourites** table uses a composite key (`user_id` + `listing_id`) to supp
 
 ---
 
-## 7. API Layer: API Gateway Configuration
+## API Layer: API Gateway Configuration
 
-### 7.1 Resource Hierarchy
+### Resource Hierarchy
 
 The API Gateway is organized into four top-level resource groups, each serving a different authorization context:
 
@@ -344,7 +346,7 @@ export const API_ENDPOINTS = {
 } as const;
 ```
 
-### 7.2 Route Definitions
+### Route Definitions
 
 The complete API surface is summarized below:
 
@@ -369,9 +371,9 @@ All `/user/*` and `/admin/*` routes require a valid Cognito `idToken` in the `Au
 
 ---
 
-## 8. Compute Layer: Lambda Functions
+## Compute Layer: Lambda Functions
 
-### 8.1 Function Organization
+### Function Organization
 
 Lambda functions are written in Python 3.11 and grouped by feature domain. Each feature construct creates one or more Lambda functions, wires them to API Gateway routes, and grants them the minimum necessary DynamoDB permissions.
 
@@ -402,7 +404,7 @@ const listingCUDLambda = new lambda.Function(this, "listingCUDLambda", {
 });
 ```
 
-### 8.2 IAM Permissions via CDK Grants
+### IAM Permissions via CDK Grants
 
 CDK's grant methods generate least-privilege IAM policies without requiring you to write policy JSON directly. Each Lambda function receives only the permissions it needs:
 
@@ -421,9 +423,9 @@ This approach is both more concise and more secure than hand-crafting IAM policy
 
 ---
 
-## 9. Authentication: Cognito Integration
+## Authentication: Cognito Integration
 
-### 9.1 Dual User Pool Architecture
+### Dual User Pool Architecture
 
 The application maintains two separate Cognito User Pools to enforce role isolation:
 
@@ -456,7 +458,7 @@ export class CognitoConstruct extends Construct {
 
 Importing pools by ARN (rather than creating them in this stack) prevents accidental deletion of user data during stack teardown.
 
-### 9.2 Authorizer Configuration
+### Authorizer Configuration
 
 API Gateway authorizers validate Cognito `idToken` JWTs *before* invoking Lambda functions. This means unauthenticated requests never reach the compute layer, reducing both cost and attack surface.
 
@@ -480,9 +482,9 @@ This helper encapsulates the three concerns of every protected route — Lambda 
 
 ---
 
-## 10. Storage: S3 for Media Assets
+## Storage: S3 for Media Assets
 
-### 10.1 Presigned URL Upload Flow
+### Presigned URL Upload Flow
 
 Listing images are stored in an S3 bucket with public read access enabled, allowing direct browser access to images without proxying through Lambda:
 
@@ -520,7 +522,7 @@ This approach offloads bandwidth from the API tier and allows uploads of any siz
 
 ---
 
-## 11. Feature Constructs: Modular Implementation
+## Feature Constructs: Modular Implementation
 
 Each feature construct follows a consistent internal pattern:
 
@@ -530,7 +532,7 @@ Each feature construct follows a consistent internal pattern:
 4. **Attach routes** to the API Gateway resource tree.
 5. **Configure CORS** preflight responses on protected resources.
 
-### 11.1 Listings CRUD
+### Listings CRUD
 
 The `ListingsFeatureConstruct` manages two Lambda functions:
 
@@ -539,7 +541,7 @@ The `ListingsFeatureConstruct` manages two Lambda functions:
 
 Routing multiple HTTP methods to a single Lambda reduces cold-start surface area — instead of three separate functions, one warm container handles all mutation operations.
 
-### 11.2 Search
+### Search
 
 The `SearchListingsFeatureConstruct` creates four Lambda functions that serve different read patterns:
 
@@ -552,7 +554,7 @@ The `SearchListingsFeatureConstruct` creates four Lambda functions that serve di
 
 Public search routes use `AuthorizationType.NONE`, allowing unauthenticated users to browse the marketplace. The favourited listings endpoint requires authentication because it queries the Favourites table using the caller's user ID.
 
-### 11.3 Live Chat
+### Chat
 
 The `LiveChatFeatureConstruct` implements a messaging system with three operations:
 
@@ -567,7 +569,7 @@ const chatRoot = props.api.userResource.addResource(API_ENDPOINTS.user.chat.valu
 const sendMessageResource = chatRoot.addResource(API_ENDPOINTS.user.chat.sendMessage);
 ```
 
-### 11.4 Favourites
+### Favourites
 
 The `FavouritesFeatureConstruct` routes all three operations (`GET`, `POST`, `DELETE`) to a single Lambda function at `/user/favourites`. The Lambda inspects the HTTP method at runtime to determine the operation:
 
@@ -579,7 +581,7 @@ This pattern keeps the infrastructure minimal (one Lambda, one route) while stil
 
 ---
 
-### 11.5 Mapping
+### Mapping
 
 The mapping feature provides geocoding capabilities that convert between street addresses and geographic coordinates. Unlike the previous feature constructs, the mapping Lambdas are deployed outside the CDK stack (under `lambdas/NonCDK/mapping/`) and exposed through a separate API Gateway deployment. This separation keeps the lightweight, stateless geocoding service decoupled from the main application stack.
 
@@ -619,7 +621,7 @@ The mapping endpoints require no authentication, since geocoding results are not
 
 ---
 
-### 11.6 Admin and Reporting
+### Admin and Reporting
 
 The admin and reporting features provide platform administrators with tools to monitor marketplace activity, review reported listings, and take moderation actions. Like the mapping feature, these Lambdas are deployed outside the CDK stack (under `lambdas/NonCDK/admin-dashboard/`) and are wired to the `/admin` resource group, which is protected by the Cognito Admin Pool authorizer.
 
@@ -636,46 +638,11 @@ The feature spans five Lambda functions across two concerns: **admin dashboard o
 
 The `getReportedAndDeleted` function scans the Listings table and categorizes results into two groups based on their moderation state.
 
-<!-- ```python
-reported = [
-    x for x in cleaned
-    if not x["is_removed"] and len(x["reports"]) > 0
-]
-
-deleted = [
-    x for x in cleaned
-    if x["is_removed"] and len(x["reports"]) > 0
-]
-``` -->
-
 This gives the admin dashboard two views: listings that have been reported but are still active (requiring review), and listings that have already been removed (for audit trail purposes). Reports within each listing are sorted chronologically by `reported_at`.
 
 #### Soft-Delete with Email Notification
 
 The `deleteListing` Lambda implements a **soft-delete toggle** rather than permanent deletion. It flips the `is_removed` boolean on the listing and, when removing a listing, triggers an email notification to the seller via **Amazon SES**.
-
-<!-- ```python
-# Toggle the is_removed flag
-new_state = not current_state
-update_expr = "SET is_removed = :new"
-expr_vals = {":new": {"BOOL": new_state}}
-
-if new_state:
-    update_expr += ", removed_reason = :reason"
-    expr_vals[":reason"] = {"S": reason}
-
-dynamodb.update_item(
-    TableName=LISTINGS_TABLE,
-    Key={"listing_id": {"S": listing_id}},
-    UpdateExpression=update_expr,
-    ExpressionAttributeValues=expr_vals
-)
-
-# If removing → notify the seller
-if new_state:
-    user_email = get_user_email(user_id)
-    send_removal_email(user_email, item_name, reason)
-``` -->
 
 The seller's email address is resolved by calling a separate user-lookup endpoint (configured via the `GET_USER_ENDPOINT` environment variable), and the SES email includes the listing name and the admin's removal reason. Toggling `is_removed` back to `false` restores the listing and clears the `removed_reason` field, allowing administrators to reverse moderation decisions.
 
@@ -686,26 +653,6 @@ The seller's email address is resolved by calling a separate user-lookup endpoin
 | `reportListing` | `POST /user/report/listing` | User | Submit a report against a listing |
 
 The reporting flow starts on the user side. Any authenticated user can report a listing by submitting a reason, which the `reportListing` Lambda appends to a `reports` list attribute on the listing item.
-
-<!-- ```python
-new_report = {
-    "M": {
-        "reason": {"S": user_report_reason},
-        "reported_at": {"N": str(reported_at)},
-        "reported_by": {"S": user_id}
-    }
-}
-
-dynamodb.update_item(
-    TableName=LISTINGS_TABLE,
-    Key={"listing_id": {"S": listing_id}},
-    UpdateExpression="SET reports = list_append(if_not_exists(reports, :empty_list), :new_report)",
-    ExpressionAttributeValues={
-        ":empty_list": {"L": []},
-        ":new_report": {"L": [new_report]}
-    }
-)
-``` -->
 
 Using `list_append` with `if_not_exists` ensures the first report on a listing initializes the list rather than failing on a missing attribute. Each report captures who filed it, when, and why — giving administrators full context when reviewing flagged content.
 
@@ -737,7 +684,7 @@ The reporting and admin features form a complete moderation pipeline:
 
 ---
 
-## 12. Deployment
+## Deployment
 
 ### Synthesize and Deploy
 
@@ -771,7 +718,7 @@ npx cdk destroy
 
 ---
 
-## 13. Known Limitations
+## Known Limitations
 
 The current architecture intentionally prioritizes simplicity and rapid iteration.
 The following limitations are known:
@@ -783,7 +730,7 @@ The following limitations are known:
 
 ---
 
-## 14. Summary
+## Summary
 
 This guide covered the architecture and implementation of a serverless backend built with AWS CDK, spanning seven core AWS services:
 

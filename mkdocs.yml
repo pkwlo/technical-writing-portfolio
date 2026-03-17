@@ -37,7 +37,7 @@ theme:
     - toc.follow
 
 nav:
-  - Home: index.md
+  # - Home: index.md
   - Writing Samples:
       - AWS Serverless Architecture Guide: aws-serverless-guide/index.md
       - Unity Character Movement Tutorial: unity-movement-tutorial/index.md
