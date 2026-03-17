@@ -1,0 +1,2669 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation samples demonstrating clear, developer-focused technical writing across cloud architecture and game development.">
+      
+      
+        <meta name="author" content="Patricia Lo">
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../unity-movement-tutorial/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>AWS Serverless Architecture Guide - Patricia Lo — Technical Writing Portfolio</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#building-a-serverless-backend-with-aws-cdk-the-crocslist-architecture-and-implementation-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Patricia Lo — Technical Writing Portfolio" class="md-header__button md-logo" aria-label="Patricia Lo — Technical Writing Portfolio" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2c-1.11 0-2 .89-2 2v16a2 2 0 0 0 2 2h4v-1.91L12.09 18H6v-2h8.09l2-2H6v-2h12.09L20 10.09V8l-6-6zm7 1.5L18.5 9H13zm7.15 9.5a.55.55 0 0 0-.4.16l-1.02 1.02 2.09 2.08 1.02-1.01c.21-.22.21-.58 0-.79l-1.3-1.3a.54.54 0 0 0-.39-.16m-2.01 1.77L12 20.92V23h2.08l6.15-6.15z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Patricia Lo — Technical Writing Portfolio
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AWS Serverless Architecture Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Writing Samples
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Patricia Lo — Technical Writing Portfolio" class="md-nav__button md-logo" aria-label="Patricia Lo — Technical Writing Portfolio" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2c-1.11 0-2 .89-2 2v16a2 2 0 0 0 2 2h4v-1.91L12.09 18H6v-2h8.09l2-2H6v-2h12.09L20 10.09V8l-6-6zm7 1.5L18.5 9H13zm7.15 9.5a.55.55 0 0 0-.4.16l-1.02 1.02 2.09 2.08 1.02-1.01c.21-.22.21-.58 0-.79l-1.3-1.3a.54.54 0 0 0-.39-.16m-2.01 1.77L12 20.92V23h2.08l6.15-6.15z"/></svg>
+
+    </a>
+    Patricia Lo — Technical Writing Portfolio
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Samples
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Writing Samples
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AWS Serverless Architecture Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AWS Serverless Architecture Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Introduction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#document-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document Scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminology
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Architecture Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-infrastructure-as-code-with-aws-cdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Infrastructure as Code with AWS CDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Infrastructure as Code with AWS CDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-why-cdk-over-cloudformation-or-terraform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Why CDK Over CloudFormation or Terraform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-the-construct-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 The Construct Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-stack-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Stack Composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-data-layer-dynamodb-table-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Data Layer: DynamoDB Table Design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Data Layer: DynamoDB Table Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-table-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Table Schemas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-access-patterns-and-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Access Patterns and Indexing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-api-layer-api-gateway-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. API Layer: API Gateway Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. API Layer: API Gateway Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-resource-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Resource Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-route-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Route Definitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-compute-layer-lambda-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Compute Layer: Lambda Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Compute Layer: Lambda Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-function-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Function Organization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-iam-permissions-via-cdk-grants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 IAM Permissions via CDK Grants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-authentication-cognito-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Authentication: Cognito Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Authentication: Cognito Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-dual-user-pool-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Dual User Pool Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-authorizer-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Authorizer Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-storage-s3-for-media-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Storage: S3 for Media Assets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Storage: S3 for Media Assets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-presigned-url-upload-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Presigned URL Upload Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-feature-constructs-modular-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Feature Constructs: Modular Implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Feature Constructs: Modular Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-listings-crud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Listings CRUD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-live-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Live Chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-favourites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 Favourites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-admin-and-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Admin and Reporting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.6 Admin and Reporting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#admin-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soft-delete-with-email-notification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Soft-Delete with Email Notification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Reporting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-moderation-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Moderation Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthesize-and-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesize and Deploy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-the-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify the Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tear-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tear Down
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Known Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-movement-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unity Character Movement Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Introduction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#document-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document Scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminology
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Architecture Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-infrastructure-as-code-with-aws-cdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Infrastructure as Code with AWS CDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Infrastructure as Code with AWS CDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-why-cdk-over-cloudformation-or-terraform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Why CDK Over CloudFormation or Terraform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-the-construct-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 The Construct Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-stack-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Stack Composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-data-layer-dynamodb-table-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Data Layer: DynamoDB Table Design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Data Layer: DynamoDB Table Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-table-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Table Schemas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-access-patterns-and-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Access Patterns and Indexing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-api-layer-api-gateway-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. API Layer: API Gateway Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. API Layer: API Gateway Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-resource-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Resource Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-route-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Route Definitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-compute-layer-lambda-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Compute Layer: Lambda Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Compute Layer: Lambda Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-function-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Function Organization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-iam-permissions-via-cdk-grants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 IAM Permissions via CDK Grants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-authentication-cognito-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Authentication: Cognito Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Authentication: Cognito Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-dual-user-pool-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Dual User Pool Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-authorizer-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Authorizer Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-storage-s3-for-media-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Storage: S3 for Media Assets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Storage: S3 for Media Assets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-presigned-url-upload-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Presigned URL Upload Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-feature-constructs-modular-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Feature Constructs: Modular Implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Feature Constructs: Modular Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-listings-crud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Listings CRUD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-live-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Live Chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-favourites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 Favourites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-admin-and-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Admin and Reporting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.6 Admin and Reporting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#admin-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soft-delete-with-email-notification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Soft-Delete with Email Notification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Reporting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-moderation-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Moderation Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthesize-and-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesize and Deploy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-the-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify the Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tear-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tear Down
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Known Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="building-a-serverless-backend-with-aws-cdk-the-crocslist-architecture-and-implementation-guide">Building a Serverless Backend with AWS CDK: The CrocsList Architecture and Implementation Guide<a class="headerlink" href="#building-a-serverless-backend-with-aws-cdk-the-crocslist-architecture-and-implementation-guide" title="Permanent link">&para;</a></h1>
+<p><strong>Author:</strong> Patricia Lo | <strong>Date:</strong> Dec 2025</p>
+<p><strong>Audience:</strong> Backend engineers, cloud architects, and DevOps practitioners with intermediate AWS experience</p>
+<hr />
+<h2 id="1-introduction">1. Introduction<a class="headerlink" href="#1-introduction" title="Permanent link">&para;</a></h2>
+<p>Serverless architectures on AWS removes the requirement to manage server infrastructure, allowing teams to focus on application logic rather than infrastructure operations. However, managing the dozens of interconnected resources that make up a serverless backend — Lambda functions, API Gateway endpoints, DynamoDB tables, S3 buckets, Cognito user pools — can quickly become unwieldy without a disciplined approach to infrastructure definition.</p>
+<p>This guide walks through the architecture and implementation of a production serverless backend for a marketplace application, built entirely with the <strong>AWS Cloud Development Kit (CDK)</strong> in TypeScript. The serverless backend supports:</p>
+<ul>
+<li><strong>Listing management</strong> — full CRUD operations with image uploads</li>
+<li><strong>Search</strong> — filtered, sortable queries across listings</li>
+<li><strong>Buyer/Seller interaction</strong> — messaging between buyers and sellers (not yet fully live due to the exclusion of websockets)</li>
+<li><strong>Favourites</strong> — user-scoped bookmarking of listings</li>
+<li><strong>Role-based access</strong> — separate authentication flows for standard users and administrators</li>
+<li><strong>Admin dashboard</strong> — view site live stats and CRUD operations for reported listings and users</li>
+<li><strong>Reporting System</strong> — user reported listings will be sent to the admin for review and reported user will be notified</li>
+<li><strong>Map services</strong> — geocoded user and listing information to display pins on a map</li>
+</ul>
+<p>Rather than assembling these features ad hoc, the serverless backend uses the AWS CDK's construct model to encapsulate each feature as a self-contained, composable unit of infrastructure. The result is a codebase where adding a new feature means writing a single construct that declares its own Lambda functions, API routes, and database permissions — then plugging it into the stack.</p>
+<h3 id="document-scope">Document Scope<a class="headerlink" href="#document-scope" title="Permanent link">&para;</a></h3>
+<p>This document describes the serverless backend architecture and infrastructure
+implementation of the CrocsList marketplace application.</p>
+<p>It focuses on:
+- infrastructure design decisions
+- service integration patterns
+- deployment and operational workflows</p>
+<p>Frontend implementation details and UI behavior are intentionally out of scope.</p>
+<h3 id="terminology">Terminology<a class="headerlink" href="#terminology" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Construct</strong> — A reusable CDK component encapsulating AWS resources.</li>
+<li><strong>Feature Construct</strong> — A project-specific construct representing one application domain.</li>
+<li><strong>Protected Route</strong> — API Gateway endpoint requiring Cognito authentication.</li>
+</ul>
+<hr />
+<h2 id="2-architecture-overview">2. Architecture Overview<a class="headerlink" href="#2-architecture-overview" title="Permanent link">&para;</a></h2>
+<p>The serverless backend follows a standard three-tier serverless pattern on AWS:</p>
+<p><strong>Figure 1 — High-level serverless architecture</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌───────────────────────────────────────────────────────────┐
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                      Client Tier                          │
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│       React SPA - Separate User &amp; Admin Dashboards        │
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>└──────────────────────────┬────────────────────────────────┘
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                           │ HTTPS + JWT (Cognito idToken)
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                           ▼
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>┌───────────────────────────────────────────────────────────┐
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│                      API Tier                             │
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│                                                           │
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ┌─────────────────────────────────────────────────┐     │
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   │            Amazon API Gateway (REST)            │     │
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   │                                                 │     │
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   │  /public/*     Unauthenticated (search, browse) │     │
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   │  /user/*       Cognito User Pool authorizer     │     │
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   │  /admin/*      Cognito Admin Pool authorizer    │     │
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   └──────────────────────┬──────────────────────────┘     │
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                          │  Lambda integration            │
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│                          ▼                                │
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>|         ┌──────────┐   ┌──────────┐   ┌──────────┐        |
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|         |  Mapping |   |  Admin   |   | Reporting|        |
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>|         |  Lambda  |   |  Lambda  |   |  Lambda  |        |
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>|         └────┬─────┘   └────┬─────┘   └────┬─────┘        |
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│ ┌──────────┐ | ┌──────────┐ | ┌──────────┐ | ┌──────────┐ │
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│ │ Listings │ | │  Search  │ | │   Chat   │ | │Favourites│ |
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│ │  Lambda  │ | │  Lambda  │ | │  Lambda  │ | │  Lambda  │ |
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│ └────┬─────┘ | └────┬─────┘ | └────┬─────┘ | └────┬─────┘ │
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>└──────┼───────┼──────┼───────┼──────┼───────┼──────┼───────┘
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>       │       │      │       │      │       │      │       
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>       ▼       ▼      ▼       ▼      ▼       ▼      ▼       
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>┌───────────────────────────────────────────────────────────┐
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│                     Data Tier                             │
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│                                                           │
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│   │   DynamoDB   │  │      S3      │  │   Cognito    │    │
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│   │              │  │              │  │              │    │
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│   │ · Listings   │  │ Listing      │  │ User Pool    │    │
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│   │ · LiveChat   │  │ Photos       │  │ Admin Pool   │    │
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│   │ · Favourites │  │              │  │              │    │
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│   │ · Users      │  │              │  │              │    │
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│   └──────────────┘  └──────────────┘  └──────────────┘    │
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>└───────────────────────────────────────────────────────────┘
+</span></code></pre></div></p>
+<p><strong>Key design decisions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single CDK stack</td>
+<td>Keeps all resources in one CloudFormation stack for atomic deployments and simplified teardown.</td>
+</tr>
+<tr>
+<td>Feature-scoped constructs</td>
+<td>Each domain feature (listings, chat, etc.) owns its Lambda functions, routes, and permissions.</td>
+</tr>
+<tr>
+<td>Python Lambda runtime</td>
+<td>Lightweight cold starts and rapid iteration for data-oriented handlers.</td>
+</tr>
+<tr>
+<td>Cognito authorizers on API Gateway</td>
+<td>Token validation happens at the gateway level, before Lambda invocation, reducing compute cost.</td>
+</tr>
+<tr>
+<td>DynamoDB on-demand capacity</td>
+<td>Eliminates capacity planning for unpredictable marketplace traffic patterns.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-prerequisites">3. Prerequisites<a class="headerlink" href="#3-prerequisites" title="Permanent link">&para;</a></h2>
+<p>Before working with this codebase, ensure the following tools are installed and configured:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node.js</td>
+<td>18.x or later</td>
+<td>CDK CLI and TypeScript compilation</td>
+</tr>
+<tr>
+<td>AWS CDK CLI</td>
+<td>2.x</td>
+<td>Infrastructure synthesis and deployment</td>
+</tr>
+<tr>
+<td>AWS CLI</td>
+<td>2.x</td>
+<td>Credential management and SSO login</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.11</td>
+<td>Lambda function runtime</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td>5.x</td>
+<td>CDK infrastructure code</td>
+</tr>
+</tbody>
+</table>
+<p>You will also need an AWS account with appropriate IAM permissions and configured CLI credentials:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>aws<span class="w"> </span>configure<span class="w"> </span>sso
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>aws<span class="w"> </span>sso<span class="w"> </span>login<span class="w"> </span>--profile<span class="w"> </span>&lt;your-profile&gt;
+</span></code></pre></div>
+<hr />
+<h2 id="4-project-structure">4. Project Structure<a class="headerlink" href="#4-project-structure" title="Permanent link">&para;</a></h2>
+<p>The serverless backend follows a separation between <strong>infrastructure definitions</strong> (TypeScript, in <code>lib/</code>) and <strong>runtime code</strong> (Python, in <code>lambdas/</code>):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>backend/
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── bin/
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   └── backend.ts              # CDK app entry point
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>├── lib/
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   ├── stacks/
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   │   └── backend-stack.ts    # Root stack — wires all constructs together
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   ├── ApiGateway/
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│   │   ├── gateway.ts          # REST API and resource tree
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   │   └── endpoints.ts        # Route path constants
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   ├── Cognito/
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│   │   └── cognito.ts          # User pool imports and authorizer setup
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   ├── DynamoDb/
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   │   └── tables.ts           # Table definitions and indexes
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│   ├── S3/
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│   │   └── listingPhotos.ts    # Photo upload bucket
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│   └── features/
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│       ├── UserListingCRUD.ts   # Listing create/update/delete + photo upload
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>│       ├── SearchListing.ts     # Search and read operations
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│       ├── LiveChat.ts          # Messaging system
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>│       └── FavouritesCRUD.ts    # Bookmark management
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>├── lambdas/
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>│   ├── userListingCRUD/         # Python handlers for listing mutations
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>│   ├── searchListings/          # Python handlers for queries
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>│   ├── liveChat/                # Python handlers for chat
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>│   ├── mapping/                 # Python handlers for maps
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>│   ├── favourites/              # Python handlers for favourites
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>│   └── adminDashboard/          # Python handlers for admin and reporting
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>├── cdk.json
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>├── tsconfig.json
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>└── package.json
+</span></code></pre></div>
+<p>The <code>lib/</code> directory describes what infrastructure exists, while <code>lambdas/</code> contains what that infrastructure does at runtime.</p>
+<hr />
+<h2 id="5-infrastructure-as-code-with-aws-cdk">5. Infrastructure as Code with AWS CDK<a class="headerlink" href="#5-infrastructure-as-code-with-aws-cdk" title="Permanent link">&para;</a></h2>
+<h3 id="51-why-cdk-over-cloudformation-or-terraform">5.1 Why CDK Over CloudFormation or Terraform<a class="headerlink" href="#51-why-cdk-over-cloudformation-or-terraform" title="Permanent link">&para;</a></h3>
+<p>AWS CDK allows you to define cloud infrastructure using general-purpose programming languages. Compared to writing raw CloudFormation YAML or Terraform HCL, CDK offers three practical advantages for this project:</p>
+<ol>
+<li><strong>Type safety.</strong> TypeScript catches misconfigured resources at compile time — for example, passing a DynamoDB table where an S3 bucket is expected.</li>
+<li><strong>Abstraction via constructs.</strong> Repeated patterns (like attaching a Cognito authorizer to every protected route) can be encapsulated in reusable methods.</li>
+<li><strong>Same-language tooling.</strong> Infrastructure and application configuration live in the same TypeScript project, sharing types, constants, and IDE support.</li>
+</ol>
+<h3 id="52-the-construct-pattern">5.2 The Construct Pattern<a class="headerlink" href="#52-the-construct-pattern" title="Permanent link">&para;</a></h3>
+<p>CDK organizes infrastructure into <strong>constructs</strong> — composable classes that represent one or more AWS resources. This project uses three levels of abstraction:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Example</th>
+<th>What it represents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 (CFN Resources)</td>
+<td><code>CfnBucket</code></td>
+<td>A 1:1 mapping to a CloudFormation resource.</td>
+</tr>
+<tr>
+<td>L2 (Curated Constructs)</td>
+<td><code>dynamodb.Table</code>, <code>lambda.Function</code></td>
+<td>An AWS resource with sensible defaults and convenience methods (e.g., <code>.grantReadData()</code>).</td>
+</tr>
+<tr>
+<td>L3 (Patterns / Custom)</td>
+<td><code>ListingsFeatureConstruct</code></td>
+<td>A project-specific grouping of multiple L2 constructs into a single logical unit.</td>
+</tr>
+</tbody>
+</table>
+<p>The feature constructs in <code>lib/features/</code> are <strong>L3 constructs</strong> — each one bundles Lambda functions, API Gateway routes, and IAM permissions into a cohesive module that the root stack instantiates with a single call.</p>
+<h3 id="53-stack-composition">5.3 Stack Composition<a class="headerlink" href="#53-stack-composition" title="Permanent link">&para;</a></h3>
+<p>The <code>ProductionStack</code> class serves as the composition root. It instantiates shared infrastructure (Cognito, API Gateway, DynamoDB tables, S3) and passes references into each feature construct:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">ProductionStack</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">cdk</span><span class="p">.</span><span class="nx">Stack</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">scope</span><span class="o">:</span><span class="w"> </span><span class="kt">Construct</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">props?</span><span class="o">:</span><span class="w"> </span><span class="kt">cdk.StackProps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="k">super</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">);</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">cognito</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">CognitoConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Cognito&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* pool ARNs */</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">gateway</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">CRUDGatewayConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CrudGateway&quot;</span><span class="p">);</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">tables</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">DynamoTablesConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;DynamoTables&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">userTableArn</span><span class="p">);</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">photoBucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ListingPhotosBucketConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ListingPhotosBucket&quot;</span><span class="p">);</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="ow">new</span><span class="w"> </span><span class="nx">ListingsFeatureConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ListingFeature&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="nx">tables</span><span class="p">,</span><span class="w"> </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="kt">cognito</span><span class="p">,</span><span class="w"> </span><span class="nx">api</span><span class="o">:</span><span class="w"> </span><span class="kt">gateway</span><span class="p">,</span><span class="w"> </span><span class="nx">listingPhotos</span><span class="o">:</span><span class="w"> </span><span class="kt">photoBucket</span><span class="p">,</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="ow">new</span><span class="w"> </span><span class="nx">SearchListingsFeatureConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;SearchListingsFeature&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nx">api</span><span class="o">:</span><span class="w"> </span><span class="kt">gateway</span><span class="p">,</span><span class="w"> </span><span class="nx">tables</span><span class="p">,</span><span class="w"> </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="kt">cognito</span><span class="p">,</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="ow">new</span><span class="w"> </span><span class="nx">LiveChatFeatureConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;LiveChatFeature&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span><span class="nx">api</span><span class="o">:</span><span class="w"> </span><span class="kt">gateway</span><span class="p">,</span><span class="w"> </span><span class="nx">tables</span><span class="p">,</span><span class="w"> </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="kt">cognito</span><span class="p">,</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">    </span><span class="ow">new</span><span class="w"> </span><span class="nx">FavouritesFeatureConstruct</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;FavouritesFature&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">      </span><span class="nx">api</span><span class="o">:</span><span class="w"> </span><span class="kt">gateway</span><span class="p">,</span><span class="w"> </span><span class="nx">tables</span><span class="p">,</span><span class="w"> </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="kt">cognito</span><span class="p">,</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Each feature construct receives only the shared resources it needs through its props interface. This dependency injection pattern makes it straightforward to add new features: define a construct, declare its dependencies, and plug it into the stack.</p>
+<hr />
+<h2 id="6-data-layer-dynamodb-table-design">6. Data Layer: DynamoDB Table Design<a class="headerlink" href="#6-data-layer-dynamodb-table-design" title="Permanent link">&para;</a></h2>
+<h3 id="61-table-schemas">6.1 Table Schemas<a class="headerlink" href="#61-table-schemas" title="Permanent link">&para;</a></h3>
+<p>The application uses four DynamoDB tables, each optimized for a specific access pattern:</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Partition Key</th>
+<th>Sort Key</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Users</strong></td>
+<td><code>id</code> (String)</td>
+<td>—</td>
+<td>User profiles (imported from external stack)</td>
+</tr>
+<tr>
+<td><strong>Listings</strong></td>
+<td><code>listing_id</code> (String)</td>
+<td>—</td>
+<td>Marketplace item listings</td>
+</tr>
+<tr>
+<td><strong>LiveChat</strong></td>
+<td><code>chatId</code> (String)</td>
+<td><code>timestamp</code> (String)</td>
+<td>Chat message history</td>
+</tr>
+<tr>
+<td><strong>Favourites</strong></td>
+<td><code>user_id</code> (String)</td>
+<td><code>listing_id</code> (String)</td>
+<td>User bookmark associations</td>
+</tr>
+</tbody>
+</table>
+<p>Table names include the AWS account ID and region to prevent collisions across environments:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">tableName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`Listings-</span><span class="si">${</span><span class="nx">cdk</span><span class="p">.</span><span class="nx">Stack</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">account</span><span class="si">}</span><span class="sb">-</span><span class="si">${</span><span class="nx">cdk</span><span class="p">.</span><span class="nx">Stack</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">region</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+</span></code></pre></div>
+<h3 id="62-access-patterns-and-indexing">6.2 Access Patterns and Indexing<a class="headerlink" href="#62-access-patterns-and-indexing" title="Permanent link">&para;</a></h3>
+<p>The Listings table includes a <strong>Global Secondary Index</strong> (GSI) to support a common query: "retrieve all listings owned by a specific user."</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">listingsTable</span><span class="p">.</span><span class="nx">addGlobalSecondaryIndex</span><span class="p">({</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nx">indexName</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;owner-id-index&quot;</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;owner_id&quot;</span><span class="p">,</span><span class="w"> </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">AttributeType</span><span class="p">.</span><span class="nx">STRING</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nx">projectionType</span><span class="o">:</span><span class="w"> </span><span class="kt">dynamodb.ProjectionType.ALL</span><span class="p">,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">});</span>
+</span></code></pre></div>
+<p>The following table maps each access pattern to the key structure that serves it:</p>
+<table>
+<thead>
+<tr>
+<th>Access Pattern</th>
+<th>Table</th>
+<th>Key Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Get listing by ID</td>
+<td>Listings</td>
+<td><code>listing_id = :id</code></td>
+</tr>
+<tr>
+<td>Get all listings by owner</td>
+<td>Listings (GSI)</td>
+<td><code>owner_id = :uid</code></td>
+</tr>
+<tr>
+<td>Search listings by keyword</td>
+<td>Listings</td>
+<td>Full table scan with filter</td>
+</tr>
+<tr>
+<td>Get messages in a conversation</td>
+<td>LiveChat</td>
+<td><code>chatId = :cid</code> (ordered by <code>timestamp</code>)</td>
+</tr>
+<tr>
+<td>Check if user favourited a listing</td>
+<td>Favourites</td>
+<td><code>user_id = :uid AND listing_id = :lid</code></td>
+</tr>
+<tr>
+<td>Get all favourites for a user</td>
+<td>Favourites</td>
+<td><code>user_id = :uid</code></td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>LiveChat</strong> table's composite key (<code>chatId</code> + <code>timestamp</code>) allows efficient retrieval of a conversation's messages in chronological order using a single query operation, avoiding the need for client-side sorting.</p>
+<p>The <strong>Favourites</strong> table uses a composite key (<code>user_id</code> + <code>listing_id</code>) to support both existence checks (is this listing favourited?) and range queries (all favourites for a user) without additional indexes.</p>
+<hr />
+<h2 id="7-api-layer-api-gateway-configuration">7. API Layer: API Gateway Configuration<a class="headerlink" href="#7-api-layer-api-gateway-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="71-resource-hierarchy">7.1 Resource Hierarchy<a class="headerlink" href="#71-resource-hierarchy" title="Permanent link">&para;</a></h3>
+<p>The API Gateway is organized into four top-level resource groups, each serving a different authorization context:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>/
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>├── /public       No authentication required
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>│   ├── /search
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│   ├── /userListings
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│   └── /listing
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>├── /auth         Authentication endpoints (signup, signin)
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>├── /user         Cognito User Pool authorizer required
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>│   ├── /listings
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>│   │   └── /photo
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>│   ├── /favouritedListings
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>│   ├── /favourites
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>│   └── /chat
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>│       ├── /sendMessage
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>│       ├── /getMessages
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>│       └── /getAllChats
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>└── /admin        Cognito Admin Pool authorizer required
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    ├── /reported-listings
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>    ├── /getAllListings
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>    ├── /delete-listing
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>    └── /getUsers
+</span></code></pre></div>
+<p>The <code>CRUDGatewayConstruct</code> exposes each top-level resource as a public property, allowing feature constructs to attach sub-resources without needing access to the full API object:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">CRUDGatewayConstruct</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Construct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">api</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.RestApi</span><span class="p">;</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">publicResource</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.Resource</span><span class="p">;</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">authResource</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.Resource</span><span class="p">;</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">userResource</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.Resource</span><span class="p">;</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">adminResource</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.Resource</span><span class="p">;</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">scope</span><span class="o">:</span><span class="w"> </span><span class="kt">Construct</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="k">super</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">);</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">apigw</span><span class="p">.</span><span class="nx">RestApi</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CRUDApi&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">      </span><span class="nx">restApiName</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CRUD API&quot;</span><span class="p">,</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">      </span><span class="nx">deployOptions</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">stageName</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;prod&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">publicResource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">addResource</span><span class="p">(</span><span class="s2">&quot;public&quot;</span><span class="p">);</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">userResource</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">addResource</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">);</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">adminResource</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">addResource</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">);</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Route path segments are defined as constants in a shared <code>endpoints.ts</code> file, preventing typos and enabling IDE auto-completion across feature constructs:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">API_ENDPOINTS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nx">user</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nx">chat</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">      </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;chat&quot;</span><span class="p">,</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">      </span><span class="nx">sendMessage</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;sendMessage&quot;</span><span class="p">,</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">      </span><span class="nx">getMessages</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;getMessages&quot;</span><span class="p">,</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">      </span><span class="nx">getAllChats</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;getAllChats&quot;</span><span class="p">,</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span><span class="c1">// ...</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="p">}</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="kd">const</span><span class="p">;</span>
+</span></code></pre></div>
+<h3 id="72-route-definitions">7.2 Route Definitions<a class="headerlink" href="#72-route-definitions" title="Permanent link">&para;</a></h3>
+<p>The complete API surface is summarized below:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/public/search</code></td>
+<td>None</td>
+<td>Search listings by keyword, tags, sort order</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/public/userListings</code></td>
+<td>None</td>
+<td>List all listings for a given user</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/public/listing</code></td>
+<td>None</td>
+<td>Retrieve a single listing by ID</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/user/listings</code></td>
+<td>User</td>
+<td>Create a new listing</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/user/listings</code></td>
+<td>User</td>
+<td>Update an existing listing</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/user/listings</code></td>
+<td>User</td>
+<td>Delete a listing</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/user/listings/photo</code></td>
+<td>User</td>
+<td>Generate a presigned URL for photo upload</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/user/favouritedListings</code></td>
+<td>User</td>
+<td>Retrieve listings the user has favourited</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/user/favourites</code></td>
+<td>User</td>
+<td>Check or list favourite associations</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/user/favourites</code></td>
+<td>User</td>
+<td>Add a listing to favourites</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/user/favourites</code></td>
+<td>User</td>
+<td>Remove a listing from favourites</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/user/chat/sendMessage</code></td>
+<td>User</td>
+<td>Send a chat message</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/user/chat/getMessages</code></td>
+<td>User</td>
+<td>Retrieve messages for a conversation</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/user/chat/getAllChats</code></td>
+<td>User</td>
+<td>List all conversations for the user</td>
+</tr>
+</tbody>
+</table>
+<p>All <code>/user/*</code> and <code>/admin/*</code> routes require a valid Cognito <code>idToken</code> in the <code>Authorization</code> header. CORS preflight responses are configured on every protected resource to support browser-based clients.</p>
+<hr />
+<h2 id="8-compute-layer-lambda-functions">8. Compute Layer: Lambda Functions<a class="headerlink" href="#8-compute-layer-lambda-functions" title="Permanent link">&para;</a></h2>
+<h3 id="81-function-organization">8.1 Function Organization<a class="headerlink" href="#81-function-organization" title="Permanent link">&para;</a></h3>
+<p>Lambda functions are written in Python 3.11 and grouped by feature domain. Each feature construct creates one or more Lambda functions, wires them to API Gateway routes, and grants them the minimum necessary DynamoDB permissions.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Lambda</th>
+<th>Handler</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Listings</strong></td>
+<td><code>listingCUDLambda</code></td>
+<td><code>listing_cud.lambda_handler</code></td>
+<td><code>POST/PATCH/DELETE /user/listings</code></td>
+</tr>
+<tr>
+<td><strong>Listings</strong></td>
+<td><code>listingPhotoLambda</code></td>
+<td><code>listing_photo.lambda_handler</code></td>
+<td><code>POST /user/listings/photo</code></td>
+</tr>
+<tr>
+<td><strong>Search</strong></td>
+<td><code>SearchListingsLambda</code></td>
+<td><code>search.lambda_handler</code></td>
+<td><code>GET /public/search</code></td>
+</tr>
+<tr>
+<td><strong>Search</strong></td>
+<td><code>userListingsLambda</code></td>
+<td><code>get_user_listings.lambda_handler</code></td>
+<td><code>GET /public/userListings</code></td>
+</tr>
+<tr>
+<td><strong>Search</strong></td>
+<td><code>favouritedListingsLambda</code></td>
+<td><code>get_user_favourited_listings.lambda_handler</code></td>
+<td><code>GET /user/favouritedListings</code></td>
+</tr>
+<tr>
+<td><strong>Search</strong></td>
+<td><code>GetListingByIdLambda</code></td>
+<td><code>get_listing_by_id.lambda_handler</code></td>
+<td><code>GET /public/listing</code></td>
+</tr>
+<tr>
+<td><strong>Chat</strong></td>
+<td><code>SendMessageLambda</code></td>
+<td><code>sendMessage.lambda_handler</code></td>
+<td><code>POST /user/chat/sendMessage</code></td>
+</tr>
+<tr>
+<td><strong>Chat</strong></td>
+<td><code>GetMessagesLambda</code></td>
+<td><code>getMessages.lambda_handler</code></td>
+<td><code>GET /user/chat/getMessages</code></td>
+</tr>
+<tr>
+<td><strong>Chat</strong></td>
+<td><code>getAllChatsLambda</code></td>
+<td><code>getAllChats.lambda_handler</code></td>
+<td><code>GET /user/chat/getAllChats</code></td>
+</tr>
+<tr>
+<td><strong>Favourites</strong></td>
+<td><code>FavouritesCRUDLambda</code></td>
+<td><code>favourites.lambda_handler</code></td>
+<td><code>GET/POST/DELETE /user/favourites</code></td>
+</tr>
+</tbody>
+</table>
+<p>Table names and bucket names are passed to Lambda functions through environment variables, keeping runtime code decoupled from CDK resource identifiers:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">listingCUDLambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">lambda</span><span class="p">.</span><span class="nb">Function</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;listingCUDLambda&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nx">runtime</span><span class="o">:</span><span class="w"> </span><span class="kt">lambda.Runtime.PYTHON_3_11</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nx">handler</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;listing_cud.lambda_handler&quot;</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nx">code</span><span class="o">:</span><span class="w"> </span><span class="kt">lambda.Code.fromAsset</span><span class="p">(</span><span class="s2">&quot;lambdas/userListingCRUD&quot;</span><span class="p">),</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nx">environment</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="nx">LISTINGS_TABLE</span><span class="o">:</span><span class="w"> </span><span class="kt">props.tables.listingsTable.tableName</span><span class="p">,</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="nx">USER_POOL_ID</span><span class="o">:</span><span class="w"> </span><span class="kt">props.auth.userPool.userPoolId</span><span class="p">,</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="p">});</span>
+</span></code></pre></div>
+<h3 id="82-iam-permissions-via-cdk-grants">8.2 IAM Permissions via CDK Grants<a class="headerlink" href="#82-iam-permissions-via-cdk-grants" title="Permanent link">&para;</a></h3>
+<p>CDK's grant methods generate least-privilege IAM policies without requiring you to write policy JSON directly. Each Lambda function receives only the permissions it needs:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1">// Read-write access for mutation operations</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nx">props</span><span class="p">.</span><span class="nx">tables</span><span class="p">.</span><span class="nx">listingsTable</span><span class="p">.</span><span class="nx">grantReadWriteData</span><span class="p">(</span><span class="nx">listingCUDLambda</span><span class="p">);</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1">// Read-only access for query operations</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nx">props</span><span class="p">.</span><span class="nx">tables</span><span class="p">.</span><span class="nx">listingsTable</span><span class="p">.</span><span class="nx">grantReadData</span><span class="p">(</span><span class="nx">searchLambda</span><span class="p">);</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1">// Write-only access for S3 uploads via presigned URLs</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="nx">props</span><span class="p">.</span><span class="nx">listingPhotos</span><span class="p">.</span><span class="nx">bucket</span><span class="p">.</span><span class="nx">grantPut</span><span class="p">(</span><span class="nx">listingPhotoLambda</span><span class="p">);</span>
+</span></code></pre></div>
+<p>This approach is both more concise and more secure than hand-crafting IAM policy documents. CDK scopes the generated policy to the specific table or bucket ARN, preventing accidental cross-resource access.</p>
+<hr />
+<h2 id="9-authentication-cognito-integration">9. Authentication: Cognito Integration<a class="headerlink" href="#9-authentication-cognito-integration" title="Permanent link">&para;</a></h2>
+<h3 id="91-dual-user-pool-architecture">9.1 Dual User Pool Architecture<a class="headerlink" href="#91-dual-user-pool-architecture" title="Permanent link">&para;</a></h3>
+<p>The application maintains two separate Cognito User Pools to enforce role isolation:</p>
+<table>
+<thead>
+<tr>
+<th>Pool</th>
+<th>Self-Signup</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User Pool</strong></td>
+<td>Enabled</td>
+<td>Standard marketplace users (buyers and sellers)</td>
+</tr>
+<tr>
+<td><strong>Admin Pool</strong></td>
+<td>Disabled</td>
+<td>Platform administrators (invite-only)</td>
+</tr>
+</tbody>
+</table>
+<p>Separating these pools ensures that a compromised user token cannot escalate to admin privileges, even if the application logic has a vulnerability. Admin accounts are created exclusively through AWS Console or CLI, never through the application's signup flow.</p>
+<p>In the CDK stack, both pools are imported by ARN from a separately managed deployment:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">CognitoConstruct</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Construct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">userPool</span><span class="o">:</span><span class="w"> </span><span class="kt">cognito.IUserPool</span><span class="p">;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">adminPool</span><span class="o">:</span><span class="w"> </span><span class="kt">cognito.IUserPool</span><span class="p">;</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">scope</span><span class="o">:</span><span class="w"> </span><span class="kt">Construct</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="o">:</span><span class="w"> </span><span class="kt">CognitoConstructProps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="k">super</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">);</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">userPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">cognito</span><span class="p">.</span><span class="nx">UserPool</span><span class="p">.</span><span class="nx">fromUserPoolArn</span><span class="p">(</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">      </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ImportedUserPool&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">.</span><span class="nx">userPoolArn</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="p">);</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">adminPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">cognito</span><span class="p">.</span><span class="nx">UserPool</span><span class="p">.</span><span class="nx">fromUserPoolArn</span><span class="p">(</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">      </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ImportedAdminPool&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">.</span><span class="nx">adminPoolArn</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">    </span><span class="p">);</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Importing pools by ARN (rather than creating them in this stack) prevents accidental deletion of user data during stack teardown.</p>
+<h3 id="92-authorizer-configuration">9.2 Authorizer Configuration<a class="headerlink" href="#92-authorizer-configuration" title="Permanent link">&para;</a></h3>
+<p>API Gateway authorizers validate Cognito <code>idToken</code> JWTs <em>before</em> invoking Lambda functions. This means unauthenticated requests never reach the compute layer, reducing both cost and attack surface.</p>
+<p>Each feature construct creates its own authorizer instance and attaches it to protected routes through a shared helper method:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">private</span><span class="w"> </span><span class="nx">addMethodWithAuthorizer</span><span class="p">(</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nx">resource</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.IResource</span><span class="p">,</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nx">lambdaFn</span><span class="o">:</span><span class="w"> </span><span class="kt">lambda.IFunction</span><span class="p">,</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nx">authorizer</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.IAuthorizer</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="nx">resource</span><span class="p">.</span><span class="nx">addMethod</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">apigw</span><span class="p">.</span><span class="nx">LambdaIntegration</span><span class="p">(</span><span class="nx">lambdaFn</span><span class="p">),</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">    </span><span class="nx">authorizer</span><span class="p">,</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">    </span><span class="nx">authorizationType</span><span class="o">:</span><span class="w"> </span><span class="kt">apigw.AuthorizationType.COGNITO</span><span class="p">,</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="p">});</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>This helper encapsulates the three concerns of every protected route — Lambda integration, authorizer attachment, and auth type declaration — into a single call, reducing boilerplate and ensuring consistency.</p>
+<hr />
+<h2 id="10-storage-s3-for-media-assets">10. Storage: S3 for Media Assets<a class="headerlink" href="#10-storage-s3-for-media-assets" title="Permanent link">&para;</a></h2>
+<h3 id="101-presigned-url-upload-flow">10.1 Presigned URL Upload Flow<a class="headerlink" href="#101-presigned-url-upload-flow" title="Permanent link">&para;</a></h3>
+<p>Listing images are stored in an S3 bucket with public read access enabled, allowing direct browser access to images without proxying through Lambda:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">bucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">s3</span><span class="p">.</span><span class="nx">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ListingPhotosBucket&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nx">bucketName</span><span class="o">:</span><span class="w"> </span><span class="sb">`listing-photos-</span><span class="si">${</span><span class="nx">cdk</span><span class="p">.</span><span class="nx">Stack</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">account</span><span class="si">}</span><span class="sb">-</span><span class="si">${</span><span class="nx">cdk</span><span class="p">.</span><span class="nx">Stack</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">region</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nx">removalPolicy</span><span class="o">:</span><span class="w"> </span><span class="kt">cdk.RemovalPolicy.RETAIN</span><span class="p">,</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nx">publicReadAccess</span><span class="o">:</span><span class="w"> </span><span class="kt">true</span><span class="p">,</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nx">blockPublicAccess</span><span class="o">:</span><span class="w"> </span><span class="kt">s3.BlockPublicAccess.BLOCK_ACLS_ONLY</span><span class="p">,</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nx">cors</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nx">allowedOrigins</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="nx">allowedMethods</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">s3</span><span class="p">.</span><span class="nx">HttpMethods</span><span class="p">.</span><span class="nx">GET</span><span class="p">,</span><span class="w"> </span><span class="nx">s3</span><span class="p">.</span><span class="nx">HttpMethods</span><span class="p">.</span><span class="nx">PUT</span><span class="p">],</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">    </span><span class="nx">allowedHeaders</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">  </span><span class="p">}],</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="p">});</span>
+</span></code></pre></div>
+<p>Uploads use a <strong>presigned URL</strong> pattern to avoid routing file data through API Gateway and Lambda, which have payload size limits (10 MB and 6 MB respectively):
+<strong>Figure 2 — Presigned upload workflow</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>┌───────────┐          ┌──────────────┐          ┌─────────────┐
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>│  Client   │  POST    │ Photo Lambda │ Presign  │     S3      │
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>│ (Browser) │─────────&gt;│ (generates   │─────────&gt;│   Bucket    │
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>│           │&lt;─────────│  signed URL) │          │             │
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>│           │  URL     │              │          │             │
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>│           │──────────┼──────────────┼────PUT──&gt;│             │
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>└───────────┘          └──────────────┘          └─────────────┘
+</span></code></pre></div></p>
+<ol>
+<li>The client sends a <code>POST</code> request to <code>/user/listings/photo</code> with metadata (filename, content type).</li>
+<li>The Lambda function generates a time-limited presigned PUT URL for S3.</li>
+<li>The client uploads the file directly to S3 using the presigned URL.</li>
+</ol>
+<p>This approach offloads bandwidth from the API tier and allows uploads of any size supported by S3 (up to 5 GB for single PUT operations).</p>
+<hr />
+<h2 id="11-feature-constructs-modular-implementation">11. Feature Constructs: Modular Implementation<a class="headerlink" href="#11-feature-constructs-modular-implementation" title="Permanent link">&para;</a></h2>
+<p>Each feature construct follows a consistent internal pattern:</p>
+<ol>
+<li><strong>Create a Cognito authorizer</strong> for the feature's protected routes.</li>
+<li><strong>Define Lambda function(s)</strong> with the Python runtime and appropriate environment variables.</li>
+<li><strong>Grant database permissions</strong> using CDK's <code>.grantReadData()</code> or <code>.grantReadWriteData()</code> methods.</li>
+<li><strong>Attach routes</strong> to the API Gateway resource tree.</li>
+<li><strong>Configure CORS</strong> preflight responses on protected resources.</li>
+</ol>
+<h3 id="111-listings-crud">11.1 Listings CRUD<a class="headerlink" href="#111-listings-crud" title="Permanent link">&para;</a></h3>
+<p>The <code>ListingsFeatureConstruct</code> manages two Lambda functions:</p>
+<ul>
+<li><strong><code>listingCUDLambda</code></strong> handles <code>POST</code>, <code>PATCH</code>, and <code>DELETE</code> operations on <code>/user/listings</code>, all routed to a single Lambda that dispatches by HTTP method.</li>
+<li><strong><code>listingPhotoLambda</code></strong> generates presigned S3 upload URLs at <code>/user/listings/photo</code>.</li>
+</ul>
+<p>Routing multiple HTTP methods to a single Lambda reduces cold-start surface area — instead of three separate functions, one warm container handles all mutation operations.</p>
+<h3 id="112-search">11.2 Search<a class="headerlink" href="#112-search" title="Permanent link">&para;</a></h3>
+<p>The <code>SearchListingsFeatureConstruct</code> creates four Lambda functions that serve different read patterns:</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Route</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SearchListingsLambda</code></td>
+<td><code>GET /public/search</code></td>
+<td>Keyword search with optional tag filters and sort</td>
+</tr>
+<tr>
+<td><code>userListingsLambda</code></td>
+<td><code>GET /public/userListings</code></td>
+<td>All listings by a specific seller</td>
+</tr>
+<tr>
+<td><code>favouritedListingsLambda</code></td>
+<td><code>GET /user/favouritedListings</code></td>
+<td>Listings bookmarked by the authenticated user</td>
+</tr>
+<tr>
+<td><code>GetListingByIdLambda</code></td>
+<td><code>GET /public/listing</code></td>
+<td>Single listing detail view</td>
+</tr>
+</tbody>
+</table>
+<p>Public search routes use <code>AuthorizationType.NONE</code>, allowing unauthenticated users to browse the marketplace. The favourited listings endpoint requires authentication because it queries the Favourites table using the caller's user ID.</p>
+<h3 id="113-live-chat">11.3 Live Chat<a class="headerlink" href="#113-live-chat" title="Permanent link">&para;</a></h3>
+<p>The <code>LiveChatFeatureConstruct</code> implements a messaging system with three operations:</p>
+<ul>
+<li><strong>Send message</strong> (<code>POST /user/chat/sendMessage</code>) — writes a message item to the LiveChat table with a composite key of <code>chatId</code> (a deterministic combination of both user IDs) and <code>timestamp</code>.</li>
+<li><strong>Get messages</strong> (<code>GET /user/chat/getMessages</code>) — queries all messages for a specific conversation, returned in chronological order by sort key.</li>
+<li><strong>Get all chats</strong> (<code>GET /user/chat/getAllChats</code>) — retrieves the list of all conversation partners for the authenticated user.</li>
+</ul>
+<p>Route path segments use the shared <code>API_ENDPOINTS</code> constants to ensure consistency between infrastructure definitions and any client-side route references:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">chatRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">props</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">userResource</span><span class="p">.</span><span class="nx">addResource</span><span class="p">(</span><span class="nx">API_ENDPOINTS</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">chat</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">sendMessageResource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">chatRoot</span><span class="p">.</span><span class="nx">addResource</span><span class="p">(</span><span class="nx">API_ENDPOINTS</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">chat</span><span class="p">.</span><span class="nx">sendMessage</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="114-favourites">11.4 Favourites<a class="headerlink" href="#114-favourites" title="Permanent link">&para;</a></h3>
+<p>The <code>FavouritesFeatureConstruct</code> routes all three operations (<code>GET</code>, <code>POST</code>, <code>DELETE</code>) to a single Lambda function at <code>/user/favourites</code>. The Lambda inspects the HTTP method at runtime to determine the operation:</p>
+<ul>
+<li><strong>POST</strong> — adds a <code>user_id</code> / <code>listing_id</code> pair to the Favourites table.</li>
+<li><strong>DELETE</strong> — removes the pair.</li>
+<li><strong>GET</strong> — checks existence of a specific pair or returns all favourites for the user.</li>
+</ul>
+<p>This pattern keeps the infrastructure minimal (one Lambda, one route) while still supporting full CRUD semantics.</p>
+<hr />
+<h3 id="115-mapping">11.5 Mapping<a class="headerlink" href="#115-mapping" title="Permanent link">&para;</a></h3>
+<p>The mapping feature provides geocoding capabilities that convert between street addresses and geographic coordinates. Unlike the previous feature constructs, the mapping Lambdas are deployed outside the CDK stack (under <code>lambdas/NonCDK/mapping/</code>) and exposed through a separate API Gateway deployment. This separation keeps the lightweight, stateless geocoding service decoupled from the main application stack.</p>
+<p>Two Lambda functions handle the two directions of geocoding:</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Route</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getCoords</code></td>
+<td><code>POST /geocode</code></td>
+<td>Forward geocode — converts an address string to latitude/longitude</td>
+</tr>
+<tr>
+<td><code>getPlace</code></td>
+<td><code>POST /reverse-geocode</code></td>
+<td>Reverse geocode — converts latitude/longitude to a human-readable address</td>
+</tr>
+</tbody>
+</table>
+<p>Both functions use the <strong>AWS Location Service (Geo-Places)</strong> API through the <code>boto3</code> <code>geo-places</code> client, avoiding the need for third-party geocoding services or API key management:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s1">&#39;geo-places&#39;</span><span class="p">,</span> <span class="n">region_name</span><span class="o">=</span><span class="s1">&#39;us-west-2&#39;</span><span class="p">)</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># Forward geocode: address → coordinates</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">geocode</span><span class="p">(</span><span class="n">QueryText</span><span class="o">=</span><span class="n">address</span><span class="p">,</span> <span class="n">MaxResults</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">lng</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;ResultItems&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Position&#39;</span><span class="p">]</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Reverse geocode: coordinates → address</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">reverse_geocode</span><span class="p">(</span><span class="n">QueryPosition</span><span class="o">=</span><span class="p">[</span><span class="n">lng</span><span class="p">,</span> <span class="n">lat</span><span class="p">],</span> <span class="n">MaxResults</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">address</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;ResultItems&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Address&#39;</span><span class="p">][</span><span class="s1">&#39;Label&#39;</span><span class="p">]</span>
+</span></code></pre></div>
+<p>Neither Lambda accesses DynamoDB directly. Instead, the geocoding results feed into the listing creation flow: when a user creates or edits a listing, the client calls the geocoding endpoint first, then includes the returned <code>latitude</code> and <code>longitude</code> in the listing payload sent to the Listings CRUD Lambda. The coordinates are stored alongside the listing in DynamoDB, enabling map-based display on the frontend.</p>
+<p><strong>Figure 3 — Mapping Workflow</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>┌───────────┐  address   ┌──────────────┐  coords   ┌───────────┐  listing + coords ┌──────────┐
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>│  Client   │───────────&gt;│ getCoords    │──────────&gt;│  Client   │──────────────────&gt;│ Listings │
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>│ (Browser) │&lt;───────────│ Lambda       │           │ (Browser) │                   │  Lambda  │
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>│           │  {lat,lng} │              │           │           │                   │          │
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>└───────────┘            └──────────────┘           └───────────┘                   └──────────┘
+</span></code></pre></div></p>
+<p>The mapping endpoints require no authentication, since geocoding results are not user-specific and carry no sensitive data.</p>
+<hr />
+<h3 id="116-admin-and-reporting">11.6 Admin and Reporting<a class="headerlink" href="#116-admin-and-reporting" title="Permanent link">&para;</a></h3>
+<p>The admin and reporting features provide platform administrators with tools to monitor marketplace activity, review reported listings, and take moderation actions. Like the mapping feature, these Lambdas are deployed outside the CDK stack (under <code>lambdas/NonCDK/admin-dashboard/</code>) and are wired to the <code>/admin</code> resource group, which is protected by the Cognito Admin Pool authorizer.</p>
+<p>The feature spans five Lambda functions across two concerns: <strong>admin dashboard operations</strong> and <strong>user-facing reporting</strong>.</p>
+<h4 id="admin-dashboard">Admin Dashboard<a class="headerlink" href="#admin-dashboard" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Route</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getAllListings</code></td>
+<td><code>GET /admin/getAllListings</code></td>
+<td>Admin</td>
+<td>Full scan of the Listings table</td>
+</tr>
+<tr>
+<td><code>getUsers</code></td>
+<td><code>GET /admin/getUsers</code></td>
+<td>Admin</td>
+<td>Full scan of the Users table</td>
+</tr>
+<tr>
+<td><code>getReportedAndDeleted</code></td>
+<td><code>GET /admin/reported-listings</code></td>
+<td>Admin</td>
+<td>Listings with reports, split by moderation status</td>
+</tr>
+<tr>
+<td><code>deleteListing</code></td>
+<td><code>POST /admin/delete-listing</code></td>
+<td>Admin</td>
+<td>Soft-delete a listing and notify the seller</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>getReportedAndDeleted</code> function scans the Listings table and categorizes results into two groups based on their moderation state.</p>
+<!-- ```python
+reported = [
+    x for x in cleaned
+    if not x["is_removed"] and len(x["reports"]) > 0
+]
+
+deleted = [
+    x for x in cleaned
+    if x["is_removed"] and len(x["reports"]) > 0
+]
+``` -->
+
+<p>This gives the admin dashboard two views: listings that have been reported but are still active (requiring review), and listings that have already been removed (for audit trail purposes). Reports within each listing are sorted chronologically by <code>reported_at</code>.</p>
+<h4 id="soft-delete-with-email-notification">Soft-Delete with Email Notification<a class="headerlink" href="#soft-delete-with-email-notification" title="Permanent link">&para;</a></h4>
+<p>The <code>deleteListing</code> Lambda implements a <strong>soft-delete toggle</strong> rather than permanent deletion. It flips the <code>is_removed</code> boolean on the listing and, when removing a listing, triggers an email notification to the seller via <strong>Amazon SES</strong>.</p>
+<!-- ```python
+# Toggle the is_removed flag
+new_state = not current_state
+update_expr = "SET is_removed = :new"
+expr_vals = {":new": {"BOOL": new_state}}
+
+if new_state:
+    update_expr += ", removed_reason = :reason"
+    expr_vals[":reason"] = {"S": reason}
+
+dynamodb.update_item(
+    TableName=LISTINGS_TABLE,
+    Key={"listing_id": {"S": listing_id}},
+    UpdateExpression=update_expr,
+    ExpressionAttributeValues=expr_vals
+)
+
+# If removing → notify the seller
+if new_state:
+    user_email = get_user_email(user_id)
+    send_removal_email(user_email, item_name, reason)
+``` -->
+
+<p>The seller's email address is resolved by calling a separate user-lookup endpoint (configured via the <code>GET_USER_ENDPOINT</code> environment variable), and the SES email includes the listing name and the admin's removal reason. Toggling <code>is_removed</code> back to <code>false</code> restores the listing and clears the <code>removed_reason</code> field, allowing administrators to reverse moderation decisions.</p>
+<h4 id="user-reporting">User Reporting<a class="headerlink" href="#user-reporting" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Route</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reportListing</code></td>
+<td><code>POST /user/report/listing</code></td>
+<td>User</td>
+<td>Submit a report against a listing</td>
+</tr>
+</tbody>
+</table>
+<p>The reporting flow starts on the user side. Any authenticated user can report a listing by submitting a reason, which the <code>reportListing</code> Lambda appends to a <code>reports</code> list attribute on the listing item.</p>
+<!-- ```python
+new_report = {
+    "M": {
+        "reason": {"S": user_report_reason},
+        "reported_at": {"N": str(reported_at)},
+        "reported_by": {"S": user_id}
+    }
+}
+
+dynamodb.update_item(
+    TableName=LISTINGS_TABLE,
+    Key={"listing_id": {"S": listing_id}},
+    UpdateExpression="SET reports = list_append(if_not_exists(reports, :empty_list), :new_report)",
+    ExpressionAttributeValues={
+        ":empty_list": {"L": []},
+        ":new_report": {"L": [new_report]}
+    }
+)
+``` -->
+
+<p>Using <code>list_append</code> with <code>if_not_exists</code> ensures the first report on a listing initializes the list rather than failing on a missing attribute. Each report captures who filed it, when, and why — giving administrators full context when reviewing flagged content.</p>
+<h4 id="end-to-end-moderation-flow">End-to-End Moderation Flow<a class="headerlink" href="#end-to-end-moderation-flow" title="Permanent link">&para;</a></h4>
+<p>The reporting and admin features form a complete moderation pipeline:</p>
+<p><strong>Figure 4 — Listing Reporting Workflow</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>┌──────────┐  report   ┌───────────────┐           ┌──────────────┐
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>│   User   │──────────&gt;│ reportListing │─ append ─&gt;│   Listings   │
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>│          │           │   Lambda      │  report   │    Table     │
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>└──────────┘           └───────────────┘           └──────┬───────┘
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>                                                          │
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>┌──────────┐  review   ┌───────────────┐    scan          │
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>│  Admin   │&lt;──────────│ getReported   │&lt;─────────────────┘
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>│          │  listed   │ AndDeleted    │
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>│          │           └───────────────┘
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>│          │
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>│          │  remove   ┌───────────────┐  SES email  ┌──────────┐
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>│          │──────────&gt;│ deleteListing │────────────&gt;│  Seller  │
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>└──────────┘           └───────────────┘             └──────────┘
+</span></code></pre></div></p>
+<ol>
+<li>A user reports a listing via <code>POST /user/report/listing</code>.</li>
+<li>The report is appended to the listing's <code>reports</code> list in DynamoDB.</li>
+<li>An administrator reviews reported listings via <code>GET /admin/reported-listings</code>.</li>
+<li>The administrator removes a listing via <code>POST /admin/delete-listing</code>, which soft-deletes it and sends an SES email to the seller explaining the removal.</li>
+</ol>
+<hr />
+<h2 id="12-deployment">12. Deployment<a class="headerlink" href="#12-deployment" title="Permanent link">&para;</a></h2>
+<h3 id="synthesize-and-deploy">Synthesize and Deploy<a class="headerlink" href="#synthesize-and-deploy" title="Permanent link">&para;</a></h3>
+<p>CDK synthesizes the TypeScript constructs into a CloudFormation template, then deploys it:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nb">cd</span><span class="w"> </span>backend
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>npm<span class="w"> </span>run<span class="w"> </span>build<span class="w">          </span><span class="c1"># Compile TypeScript</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>npx<span class="w"> </span>cdk<span class="w"> </span>synth<span class="w">          </span><span class="c1"># Preview the CloudFormation template</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>npx<span class="w"> </span>cdk<span class="w"> </span>deploy<span class="w">         </span><span class="c1"># Deploy to AWS</span>
+</span></code></pre></div>
+<h3 id="verify-the-deployment">Verify the Deployment<a class="headerlink" href="#verify-the-deployment" title="Permanent link">&para;</a></h3>
+<p>After deployment, CDK outputs the API Gateway endpoint URL. Verify the stack is functional:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Test public search endpoint (no auth required)</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>curl<span class="w"> </span><span class="s2">&quot;https://&lt;api-id&gt;.execute-api.us-west-2.amazonaws.com/prod/public/search?name=test&quot;</span>
+</span></code></pre></div>
+<h3 id="tear-down">Tear Down<a class="headerlink" href="#tear-down" title="Permanent link">&para;</a></h3>
+<p>To remove all resources created by the stack:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>npx<span class="w"> </span>cdk<span class="w"> </span>destroy
+</span></code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> S3 buckets configured with <code>removalPolicy: RETAIN</code> will persist after stack deletion to prevent accidental data loss. Delete them manually through the AWS Console if needed.</p>
+</blockquote>
+<hr />
+<h2 id="13-known-limitations">13. Known Limitations<a class="headerlink" href="#13-known-limitations" title="Permanent link">&para;</a></h2>
+<p>The current architecture intentionally prioritizes simplicity and rapid iteration.
+The following limitations are known:</p>
+<ul>
+<li>Listing search relies on DynamoDB scans and may require OpenSearch for large datasets.</li>
+<li>Live chat uses request-based polling rather than WebSockets, limiting real-time responsiveness.</li>
+<li>A single CDK stack simplifies deployment but may increase deployment duration as features expand.</li>
+<li>Mapping and admin services are deployed outside CDK, introducing operational inconsistency.</li>
+</ul>
+<hr />
+<h2 id="14-summary">14. Summary<a class="headerlink" href="#14-summary" title="Permanent link">&para;</a></h2>
+<p>This guide covered the architecture and implementation of a serverless backend built with AWS CDK, spanning seven core AWS services:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Role in Architecture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AWS CDK</strong></td>
+<td>Infrastructure definition, deployment, and permissions management</td>
+</tr>
+<tr>
+<td><strong>API Gateway</strong></td>
+<td>Request routing, CORS, and pre-Lambda authentication</td>
+</tr>
+<tr>
+<td><strong>Lambda</strong></td>
+<td>Stateless business logic (Python 3.11)</td>
+</tr>
+<tr>
+<td><strong>DynamoDB</strong></td>
+<td>Low-latency data storage with single-digit-millisecond reads</td>
+</tr>
+<tr>
+<td><strong>Cognito</strong></td>
+<td>JWT-based authentication with role isolation</td>
+</tr>
+<tr>
+<td><strong>S3</strong></td>
+<td>Media storage with direct client uploads via presigned URLs</td>
+</tr>
+<tr>
+<td><strong>SES</strong></td>
+<td>Send notifications to Sellers, Buyers, and Admins</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>construct-per-feature</strong> pattern demonstrated here scales well as the application grows. Adding a new feature — say, a notification system — means creating a new construct that declares its own Lambda, routes, and permissions, then adding a single line to the root stack. No existing code needs modification.</p>
+<p>For teams evaluating serverless on AWS, CDK offers a practical middle ground: the full power of CloudFormation with the ergonomics of a typed programming language. The patterns in this guide — feature constructs, grant-based permissions, presigned upload flows, and dual-pool authentication — provide a reusable foundation for production serverless applications.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2026 Patricia Lo
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/pkwlo" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://linkedin.com/in/patricialo" target="_blank" rel="noopener" title="LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
