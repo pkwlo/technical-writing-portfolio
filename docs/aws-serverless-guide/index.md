@@ -1,52 +1,8 @@
-# Serverless Backend Architecture and Implementation Guide
-
-**Technical Writing Sample — Patricia Lo**  
-Prepared for Technical Writer Applications
-
----
-
 # Building a Serverless Backend with AWS CDK: The CrocsList Architecture and Implementation Guide
 
-**Author:** Patricia Lo
-**Date:** Dec 2025
+**Author:** Patricia Lo | **Date:** Dec 2025
+
 **Audience:** Backend engineers, cloud architects, and DevOps practitioners with intermediate AWS experience
-
----
-
-## Table of Contents
-
-1. [Introduction](#1-introduction)
-2. [Architecture Overview](#2-architecture-overview)
-3. [Prerequisites](#3-prerequisites)
-4. [Project Structure](#4-project-structure)
-5. [Infrastructure as Code with AWS CDK](#5-infrastructure-as-code-with-aws-cdk)
-   - 5.1 [Why CDK Over CloudFormation or Terraform](#51-why-cdk-over-cloudformation-or-terraform)
-   - 5.2 [The Construct Pattern](#52-the-construct-pattern)
-   - 5.3 [Stack Composition](#53-stack-composition)
-6. [Data Layer: DynamoDB Table Design](#6-data-layer-dynamodb-table-design)
-   - 6.1 [Table Schemas](#61-table-schemas)
-   - 6.2 [Access Patterns and Indexing](#62-access-patterns-and-indexing)
-7. [API Layer: API Gateway Configuration](#7-api-layer-api-gateway-configuration)
-   - 7.1 [Resource Hierarchy](#71-resource-hierarchy)
-   - 7.2 [Route Definitions](#72-route-definitions)
-8. [Compute Layer: Lambda Functions](#8-compute-layer-lambda-functions)
-   - 8.1 [Function Organization](#81-function-organization)
-   - 8.2 [IAM Permissions via CDK Grants](#82-iam-permissions-via-cdk-grants)
-9. [Authentication: Cognito Integration](#9-authentication-cognito-integration)
-   - 9.1 [Dual User Pool Architecture](#91-dual-user-pool-architecture)
-   - 9.2 [Authorizer Configuration](#92-authorizer-configuration)
-10. [Storage: S3 for Media Assets](#10-storage-s3-for-media-assets)
-    - 10.1 [Presigned URL Upload Flow](#101-presigned-url-upload-flow)
-11. [Feature Constructs: Modular Implementation](#11-feature-constructs-modular-implementation)
-    - 11.1 [Listings CRUD](#111-listings-crud)
-    - 11.2 [Search](#112-search)
-    - 11.3 [Live Chat](#113-live-chat)
-    - 11.4 [Favourites](#114-favourites)
-    - 11.5 [Mapping](#115-mapping)
-    - 11.6 [Admin & Reporting](#116-admin-and-reporting)
-12. [Deployment](#12-deployment)
-13. [Known Limitations](#13-known-limitations)
-14. [Summary](#13-summary)
 
 ---
 
